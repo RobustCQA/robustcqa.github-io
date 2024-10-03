@@ -15,17 +15,129 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name"><img src="./logo.png" class="logo"/></h1>
-      <a href="#" class="btn">Paper</a>
-      <a href="" class="btn">RobustCQA</a>
-      <a href="" class="btn">ChartQA-Split</a>
-      <a href="" class="btn">Explore</a>
-      <a href="" class="btn">Code</a>
+      <h1 class="project-name"><img src="./images/logo.png" class="logo"/></h1>
+      <a href="https://arxiv.org/abs/2407.11229" class="btn">Paper</a>
+      <a href="https://github.com/RobustCQA/Robust-CQA" class="btn">RobustCQA</a>
+      <a href="https://github.com/RobustCQA/ChartQA-Split" class="btn">ChartQA-Split</a>
+      <a href="#" class="btn">Explore</a>
+      <a href="https://github.com/RobustCQA/Robust-CQA" class="btn">Code</a>
     </section>
 
     <section class="main-content">
       <h1>Unraveling the Truth: Do LLMs really Understand Charts? A Deep Dive into Consistency and Robustness</h1>
-            
+      
+      <h2>About</h2>
+      <p>Chart Question Answering (CQA) plays a critical role in the domain of Visual Language Understanding (VLU). Despite the progress in Visual Language Models (VLMs), their robustness and consistency in this area remain underexplored. This paper presents a thorough evaluation of state-of-the-art VLMs using a diverse set of datasets specifically developed for this study, which include multiple question categories and chart formats.</p>
+      <p>We focus on two key areas:
+        <ul>
+        <li>Model performance on varying levels of chart and question complexity</li>
+        <li>Robustness across different visual representations of identical data</li>
+        </ul>
+      </p>
+      
+      <center><img src="./images/first_page.jpg" class="cover-image" style="width: 65%;"/></center>
+      <p>Our analysis reveals significant performance differences depending on question type and chart format, uncovering both the strengths and limitations of current models. We also propose future research directions to enhance the robustness and reliability of CQA systems, addressing gaps identified in this study. Ultimately, this work highlights the challenges in the field and offers insights for future advancements.</p>
+
+      <h2>Can models reason consistently?</h2>
+      <p>We analyse the effect of various chart question answering models across different chart types and question complexities.</p>
+
+      <h3>Dataset Details</h3>
+      <p>We used the ChartQA dataset as our primary benchmark owing to its variety and presence of underlying tables, which allowed us to generate controlled visual perturbations for analysis later.</p>
+      <h4>Chart and Question Categorization:</h4>
+      <p>To evaluate model performance, we categorized both charts and questions based on complexity:
+        <ul>
+        <li><strong>Simple Charts:</strong> Contain two columns (representing dependent and independent variables).</li>
+        <li><strong>Complex Charts:</strong> Contain more than two columns, depicting multiple variables and visual elements.</li>
+        </ul>
+
+        Questions were classified as:
+        <ul>
+        <li><strong>Simple Questions</strong> Focus on single-step data extraction.</li>
+        <li><strong>Complex Questions</strong> Require multi-step reasoning, comparisons, and logical inferences.</li>
+        </ul>
+      </p>
+      <p>This categorization helped form a modified evaluation dataset called ChartQA-Split, which allowed us to isolate the effects of chart and question complexity on model performance.</p>
+      <img src="./images/simplecomplex.png" class="simplecomplex"/>
+      
+      <h3>Key Findings</h3>
+      <p>Our analysis revealed that model performance varied significantly across different chart and question categories. While models performed well on simple charts and questions, their accuracy dropped significantly on complex charts and questions. This suggests that current models struggle with multi-step reasoning and complex visual representations.</p>
+      <ul>
+      <li><strong>Chart Types:</strong> Models perform better on simple charts than complex ones, due to challenges like overlapping data and color resolution in complex charts.</li>
+      <li><strong>Question Types:</strong> Models handle simple questions better than complex ones, with GPT-4o and Gemini 1.5 Flash showing the best reasoning abilities.</li>
+      <li><strong>Complexity Comparison:</strong> GPT-4o excels at reasoning on complex questions, while other models favor complex charts with simple questions, showing limited reasoning skills.</li>
+      <li><strong>Model Failures:</strong> Common failures include counting, distinguishing similar colors, and interpreting summary statistics, especially in tightly packed pie charts.</li>
+      <li><strong>Visual vs. Knowledge-based Reasoning:</strong> Some models rely more on internal knowledge than the actual chart, suggesting the need for better visual evaluation methods.</li>
+      </ul>
+      
+      <h2>Are models robust on CQA?</h2>
+      <p>We investigate the robustness of models across different visual representations of the same underlying data.</p>
+
+      <h3>Dataset Details</h3>
+      <p>We used the ChartQA dataset to generate visual perturbations, creating a new dataset called RobustCQA. This dataset contains visually altered charts with the same underlying data, allowing us to evaluate model robustness.</p>
+      <p>We developed the RobustCQA dataset with 75 perturbation types, manipulating visual elements like:
+        <ul>
+        <li><strong>Color Schemes:</strong> Changing palettes, gradients, and hues.</li>
+        <li><strong>Chart Types:</strong> Experimenting with line, bar, stair, and stem plots.</li>
+        <li><strong>Legend/Axis Modifications:</strong> Adjusting label positions and formatting.</li>
+        </ul>
+      </p>
+      <p>The <strong>Matplotlib</strong> library was used to generate perturbed charts while preserving underlying data. Human evaluators verified the relevance and answerability of the perturbed charts, leading to a final set of <strong>22 perturbation categories for simple charts</strong> and <strong>25 for complex charts</strong>. We sampled 400 chart-question pairs for evaluation, comparing results against default Matplotlib charts.</p>
+      <img src="./images/perturb.png" class="perturb"/>
+
+      <h3>Key Findings</h3>
+      <p>Our analysis revealed significant performance drops across models when faced with visual perturbations. While most models struggled with consistency, some showed better robustness than others. Key findings include:</p>
+      <ul>
+      <li><strong>Consistency:</strong> Most models exhibited significant performance drops when faced with perturbations. InternLM-XComposer2 and Gemini 1.5 Flash proved to be the most robust.</li>
+      <li><strong>Enhancing Performance:</strong> Perturbations like annotated data points, grids, optimal legend placement, and increased font size consistently improved model accuracy, particularly for bar graphs.</li>
+      <li><strong>Challenging Perturbations:</strong> Models struggled with logarithmic scales, horizontal stacked charts, and stair plots, often failing in tasks requiring mathematical reasoning.</li>
+      <li><strong>Perturbation-Question Correlation:</strong> Some chart types, like line charts, were more effective for trend-related questions, while stacked bar charts were generally ineffective except for aggregation tasks.</li>
+      </ul>
+      <p>These findings highlight the importance of creating diverse datasets and more robust models for improved chart-based reasoning.</p>
+
+      <h2>People</h2>
+      <p>This work was possible due to a collaboration of people from various institutions and orgnanizations including <a href="https://www.iiit.ac.in/">IIIT Hyderabad</a>, <a href="https://research.adobe.com/">Adobe Research</a> and  <a href="https://www.upenn.edu/">UPenn</a>. The people involved in the project were</p>
+
+      <figure style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <a href="https://www.linkedin.com/in/ajirs/">
+          <img src="./images/srijam.jpeg" style="width:150px; height: 150px; margin: 10px;">
+          <figcaption style="text-align: center;">Srija Mukhopadhyay</figcaption>
+        </a>
+        <a href="https://www.linkedin.com/in/adnanqidwai/">
+          <img src="./images/adnanqidwai.jpeg" style="width:150px; height: 150px; margin: 10px;">
+          <figcaption  style="text-align: center;">Adnan Qidwai</figcaption>
+        </a>
+        <a href="https://research.adobe.com/person/aparna-garimella/">
+          <img src="./images/aparnagarimella.jpg" style="width:150px; height: 150px; margin: 10px;">
+          <figcaption  style="text-align: center;">Aparna Garimella</figcaption>
+        </a>
+        <a href="https://www.linkedin.com/in/pritika-ramu-3921491ab/">
+        <img src="./images/pritikaramu.jpeg" style="width:150px; height: 150px; margin: 10px;">
+        <figcaption  style="text-align: center;">Pritika Ramu</figcaption>
+        </a>
+        <a href="https://vgupta123.github.io">
+          <img src="./images/vg.jpeg" style="width:150px; height: 150px; margin: 10px;">
+          <figcaption  style="text-align: center;">Vivek Gupta</figcaption>
+        </a>
+        <a href="https://www.cis.upenn.edu/~danroth/">
+        <img src="./images/danroth.jpeg" style="width:150px; height: 150px; margin: 10px;">
+        <figcaption  style="text-align: center;">Dan Roth</figcaption>
+        </a>
+      </figure> 
+
+      <h2>Citation</h2>
+      <p>Please cite our paper as below</p>
+      <pre><code>@misc{mukhopadhyay2024unravelingtruthllmsreally,
+        title={Unraveling the Truth: Do LLMs really Understand Charts? A Deep Dive into Consistency and Robustness}, 
+        author={Srija Mukhopadhyay and Adnan Qidwai and Aparna Garimella and Pritika Ramu and Vivek Gupta and Dan Roth},
+        year={2024},
+        eprint={2407.11229},
+        archivePrefix={arXiv},
+        primaryClass={cs.CL},
+        url={https://arxiv.org/abs/2407.11229}}</code></pre>
+
+      <h2>Acknowledgements</h2>
+      <p>Research was sponsored by the Army Research Office and was accomplished under Grant Number W911NF-20-1-0080. The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the Army Research Office or the U.S. Government. The U.S. Government is authorized to reproduce and distribute reprints for Government purposes notwithstanding any copyright notation herein. This work was partially funded by ONR Contract N00014-23-1-2365. Lastly, we acknowledge the generous gift from Adobe.</p>
+
       <footer class="site-footer">
         <span class="site-footer-owner"
           >This page was made using the
