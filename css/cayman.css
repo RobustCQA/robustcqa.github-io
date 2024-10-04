@@ -251,3 +251,8 @@ a {
 
 .site-footer-credits {
   color: #819198; }
+
+.carousel-control-next,
+.carousel-control-prev , .carousel-indicators {
+    filter: invert(100%);
+}
